@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController //s a specialized version of the controller. It includes the @Controller and @ResponseBody annotations and as a result, simplifies the controller implementation
 @RequestMapping("api/v1/")
 public class TrackController {
     private TrackService trackService;
@@ -52,7 +52,7 @@ public class TrackController {
     //to update the track
     public ResponseEntity<?> updateTrackById(@PathVariable int id, @RequestBody Track track) {
         Track trackUpdated = trackService.updateTrackById(id, track);
-        return new ResponseEntity<>(trackUpdated, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(trackUpdated, HttpStatus.OK);
 
     }
 }
