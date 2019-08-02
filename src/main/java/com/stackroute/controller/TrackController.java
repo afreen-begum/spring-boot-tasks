@@ -55,7 +55,7 @@ public class TrackController {
         Track trackUpdated = trackService.updateTrackById(id, track);
         return new ResponseEntity<>(trackUpdated, HttpStatus.ACCEPTED);
     }
-    @Query("track/{name}")
+    @GetMapping("trackname/{name}")
     //to get track by its name
     public ResponseEntity<?> getTrackByName(@PathVariable String name) {
         System.out.println(name);
