@@ -56,5 +56,12 @@ public class TrackServiceImpl implements TrackService {
             Track updateTrackById = trackRepository.save(track);
             return updateTrackById;
         }
+        @Override
+        //to get a track by its name
+       public Track getTrackByName(String name) {
+        Track retrivedTrack=trackRepository.findByName(name);
+        return retrivedTrack;
+
+        }
     }
 

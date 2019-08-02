@@ -3,6 +3,7 @@ package com.stackroute.controller;
 import com.stackroute.domain.Track;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +53,14 @@ public class TrackController {
     //to update the track
     public ResponseEntity<?> updateTrackById(@PathVariable int id, @RequestBody Track track) {
         Track trackUpdated = trackService.updateTrackById(id, track);
-        return new ResponseEntity<>(trackUpdated, HttpStatus.OK);
-
+        return new ResponseEntity<>(trackUpdated, HttpStatus.ACCEPTED);
+    }
+    @Query("track/{name}")
+    //to get track by its name
+    public ResponseEntity<?> getTrackByName(@PathVariable String name) {
+        System.out.println(name);
+        Track retrivedTrack = trackService.getTrackByName(name);
+        return new ResponseEntity<Track>(retrivedTrack,HttpStatus.FOUND);
     }
 }
 
