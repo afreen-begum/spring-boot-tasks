@@ -4,12 +4,14 @@ import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Primary
 public class TrackServiceImpl implements TrackService {
     private TrackRepository trackRepository;
     //TrackServiceImpl constructor is created
@@ -74,7 +76,7 @@ public class TrackServiceImpl implements TrackService {
         }
         Track update = trackRepository.findById(id).get();
         update.setName(track.getName());
-        update.setComments(track.getComments());
+        update.setComment(track.getComment());
         return trackRepository.save(track);
 
 
