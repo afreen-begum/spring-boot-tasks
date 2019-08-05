@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:application.properties")
 public class CommandLineRunnerImpl implements CommandLineRunner {
     //    Value annotation is used for injecting values into fields in Spring-managed beans
-    @Value("${track.id}")
+    @Value("${track1.id}")
     private int id;
-    @Value("${track.name}")
+    @Value("${track1.name}")
     private String name;
-    @Value("${track.comment}")
+    @Value("${track1.comment}")
     private String comment;
     Track track = new Track();
     private TrackRepository trackRepository;
