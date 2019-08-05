@@ -5,13 +5,15 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
+//@Primary
+@Profile("prod")
 public class TrackServiceImpl implements TrackService {
     private TrackRepository trackRepository;
     //TrackServiceImpl constructor is created

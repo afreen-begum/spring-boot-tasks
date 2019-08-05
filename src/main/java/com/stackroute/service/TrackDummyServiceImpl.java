@@ -3,6 +3,7 @@ import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Service
 /*@Qualifier("dummyImplementation")*/
 //Inorder to run this implementation class either we can use @Primary annotation or we can specify in @Qualifier
+@Profile("dev")
 public class TrackDummyServiceImpl implements TrackService {
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException {
