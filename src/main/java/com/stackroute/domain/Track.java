@@ -1,14 +1,17 @@
 package com.stackroute.domain;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
+/*import javax.persistence.Entity;
+import javax.persistence.Id;*/
+@Document(collection = "track")
 // Entity defines that a class can be mapped to a table
-@Entity
+//@Entity
 
 /*  Data bundles the features of @ToString, @EqualsAndHashCode, @Getter / @Setter
     and @RequiredArgsConstructor together*/
