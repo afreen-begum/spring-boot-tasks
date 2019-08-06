@@ -12,6 +12,6 @@ import java.util.Optional;
 @Document
 public interface TrackRepository extends MongoRepository<Track,Integer> {
     //@Query("select t from Track t where t.name = ?1")
-    public Track getFindByName(String name);
+    public Track findByName(String name);
 
 }
