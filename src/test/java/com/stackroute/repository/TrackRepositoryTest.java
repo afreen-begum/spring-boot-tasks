@@ -34,6 +34,7 @@ public class TrackRepositoryTest {
     public void tearDown() {
         trackRepository.deleteAll();
     }
+
     @Test
     public void testToNotSaveAnyTracks() {
 
@@ -97,14 +98,6 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testToDeleteTrackById() {
-
-        assertEquals(false, trackRepository.existsById(track.getId()));
-        trackRepository.deleteById(track.getId());
-
-    }
-
-    @Test
     public void testToDeleteTrackByIdAndReturnsException() {
         Track t1 = new Track(2, "closer", "love song");
         trackRepository.save(t1);
@@ -135,22 +128,22 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testToCheckFindByNameDataByName(){
+    public void testToFindByNameChecksForTrackName() {
 
         trackRepository.save(track);
         Track t1 = trackRepository.findByName(track.getName());
-        assertEquals("closer",t1.getName());
+        assertEquals("closer", t1.getName());
 
 
     }
 
     @Test
-    public void testToCheckFindByNameIsNotEqual(){
+    public void testToCheckFindByNameIsNotEqual() {
 
         trackRepository.save(track);
 
         Track t1 = trackRepository.findByName(track.getName());
-        assertNotEquals("taki-taki",t1.getName());
+        assertNotEquals("taki-taki", t1.getName());
 
     }
 
