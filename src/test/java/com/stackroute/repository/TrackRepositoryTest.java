@@ -25,22 +25,15 @@ public class TrackRepositoryTest {
     @Before
     public void setUp() {
         track = new Track();
-        track.setId(12);
-        track.setName("afreen");
-        track.setComment("good tracks");
+        track.setId(1);
+        track.setName("closer");
+        track.setComment("love song");
     }
 
     @After
     public void tearDown() {
         trackRepository.deleteAll();
     }
-    @Test
-    public void testToSaveTheTrack() {
-
-        Track testTrack = trackRepository.findById(track.getId()).get();
-        assertEquals(track, testTrack);
-    }
-
     @Test
     public void testToNotSaveAnyTracks() {
 
@@ -60,7 +53,7 @@ public class TrackRepositoryTest {
 
         List<Track> trackList = trackRepository.findAll();
 
-        assertEquals("taki-taki", trackList.get(2).getName());
+        assertEquals("let me love you", trackList.get(2).getName());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -74,14 +67,14 @@ public class TrackRepositoryTest {
 
         List<Track> trackList = trackRepository.findAll();
 
-        assertEquals("closer", trackList.get(5).getName());
+        assertEquals("taki-taki", trackList.get(5).getName());
     }
 
     @Test
     public void testToGetTrackById() {
         Track t1 = new Track();
-        Track t2 = new Track(3, "taki-taki", "hiphop");
-        Track t3 = new Track(4, "let me love you", "justin bieber");
+        Track t2 = new Track(2, "closer", "love song");
+        Track t3 = new Track(3, "taki-taki", "hiphop");
         trackRepository.save(t2);
         trackRepository.save(t3);
         t1.setId(3);
@@ -91,11 +84,11 @@ public class TrackRepositoryTest {
 
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testToGetTrackByIdThrowsException() {
         Track t1 = new Track();
-        Track t2 = new Track(3, "taki-taki", "hiphop");
-        Track t3 = new Track(4, "let me love you", "justin bieber");
+        Track t2 = new Track(3, "closer", "lovesong");
+        Track t3 = new Track(4, "taki-taki", "hiphop");
         trackRepository.save(t2);
         trackRepository.save(t3);
         t1.setId(4);
@@ -106,7 +99,7 @@ public class TrackRepositoryTest {
     @Test
     public void testToDeleteTrackById() {
 
-        assertEquals(true, trackRepository.existsById(track.getId()));
+        assertEquals(false, trackRepository.existsById(track.getId()));
         trackRepository.deleteById(track.getId());
 
     }
@@ -146,7 +139,7 @@ public class TrackRepositoryTest {
 
         trackRepository.save(track);
         Track t1 = trackRepository.findByName(track.getName());
-        assertEquals("taki-taki",t1.getName());
+        assertEquals("closer",t1.getName());
 
 
     }
@@ -157,7 +150,7 @@ public class TrackRepositoryTest {
         trackRepository.save(track);
 
         Track t1 = trackRepository.findByName(track.getName());
-        assertNotEquals("closer",t1.getName());
+        assertNotEquals("taki-taki",t1.getName());
 
     }
 
