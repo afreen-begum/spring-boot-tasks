@@ -40,71 +40,184 @@ public class TrackServiceTest {
         list = new ArrayList<>();
         list.add(track);
     }
-
-    @After
+     @After
     public void tearDown() throws Exception {
+        track = null;
+        list = null;
+        trackRepository.deleteAll();
     }
 
     @Test
-    public void saveTrackSuccess() throws TrackAlreadyExistsException {
-        when(trackRepository.existsById(track.getId())).thenReturn(false);
+    public void givenInputShouldReturnSaveTrackSuccess() throws TrackAlreadyExistsException {
+
         when(trackRepository.save(any())).thenReturn(track);
-        Track saveTrack = trackService.saveTrack(track);
-        Assert.assertEquals(track, saveTrack);
-        //verifies that trackRepository save method is only called once
-        verify(trackRepository, times(1)).save(track);
-    }
-
-    @Test
-    public void getAllTracks() {
-        trackRepository.save(track);
-        //injecting the mock to return specific data
-        when(trackRepository.findAll()).thenReturn(list);
-        List<Track> trackList = trackRepository.findAll();
-        Assert.assertEquals(list, trackList);
-    }
-
-    @Test(expected = TrackAlreadyExistsException.class)
-    public void saveTrackTestFailure() throws TrackAlreadyExistsException {
-        when(trackRepository.save(any())).thenReturn(null);
         Track savedTrack = trackService.saveTrack(track);
-        System.out.println("savedTrack" + savedTrack);
+        assertEquals(track,savedTrack);
+
+        verify(trackRepository,times(1)).save(track);
 
     }
 
     @Test
-    public void getTrackByName() throws TrackNotFoundException {
+    public void givenInputShouldReturnSaveTrackChecksForNotNull() throws TrackAlreadyExistsException {
+
+        when(trackRepository.save(any())).thenReturn(track);
+        Track savedTrack1 = trackService.saveTrack(track);
+
+        assertNotNull(savedTrack1);
+
+        verify(trackRepository,times(1)).save(track);
+
+    }
+
+    @Test
+    public void givenInputShouldReturnGetByIdSuccess() throws TrackNotFoundException {
+
         trackRepository.save(track);
-        when(trackRepository.findByName(any())).thenReturn(track);
-        Track findByName = trackService.getTrackByName("afreen");
+
+        when(trackRepository.existsById(track.getId())).thenReturn(true);
+        when(trackRepository.findById(track.getId())).thenReturn(java.util.Optional.of(track));
+        Track getTrack = trackService.getById(track.getId());
+        assertEquals(track,getTrack);
+
+        verify(trackRepository,times(2)).findById(track.getId());
 
     }
 
     @Test(expected = TrackNotFoundException.class)
-    public void getTrackById() throws TrackNotFoundException {
-        trackRepository.save(track);
-        when(trackRepository.existsById(10)).thenReturn(true);
-        when(trackRepository.findById(10)).thenReturn(Optional.of(track));
-        Track findById = trackService.getTrackById(10);
-        Assert.assertEquals(track, findById);
-    }
+    public void givenInputShouldReturnGetByIdFailure() throws TrackNotFoundException {
 
-    @Test
-    public void updateTrackById() throws TrackNotFoundException {
         trackRepository.save(track);
 
-        when(trackRepository.findById(1)).thenReturn(Optional.of(track));
-        when(trackRepository.save(track)).thenReturn(track);
-        Track updateTrack = trackService.updateTrackById(1, track);
-        Assert.assertEquals(track, updateTrack);
-    }
-
-    @Test
-    public void deleteTrackById() throws TrackNotFoundException {
-        trackRepository.save(track);
         when(trackRepository.existsById(track.getId())).thenReturn(true);
+        when(trackRepository.findById(track.getId())).thenReturn(java.util.Optional.of(track));
+        Track getTrack = trackService.getById(24);
+        assertEquals(track,getTrack);
+
+        verify(trackRepository,times(2)).findById(track.getId());
+    }
+
+    @Test
+    public void givenInputShouldReturnAllTracksSuccess() throws Exception {
+
+        trackRepository.save(track);
+
+        when(trackRepository.findAll()).thenReturn(list);
+        List<Track> savedList = trackService.getAllTracks();
+        assertEquals(list,savedList);
+
+        verify(trackRepository,times(2)).findAll();
+    }
+
+    @Test
+    public void givenInputShouldDeleteTrackByIdSuccess() throws TrackNotFoundException {
+        trackRepository.save(track);
+
+        when(trackRepository.existsById(track.getId())).thenReturn(true);
+        when(trackRepository.findById(track.getId())).thenReturn(java.util.Optional.of(track));
+
+        Optional<Track> track1 = trackService.deleteTrackById(track.getId());
+
+        assertEquals(true,trackRepository.existsById(track.getId()));
+
+        verify(trackRepository,times(1)).deleteById(track.getId());
+
+    }
+
+    @Test(expected = TrackNotFoundException.class)
+    public void givenInputShouldDeleteTrackByIdException() throws TrackNotFoundException {
+        trackRepository.save(track);
+
+        when(trackRepository.existsById(track.getId())).thenReturn(true);
+        when(trackRepository.findById(24)).thenReturn(java.util.Optional.of(track));
+
+        Optional<Track> track1 = trackService.deleteTrackById(track.getId());
+
+        assertEquals(true,trackRepository.existsById(24));
+
+        verify(trackRepository,times(1)).deleteById(track.getId());
+
+    }@Test(expected = TrackNotFoundException.class)
+    public void givenInputShouldUpdateTrackException() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+        Track t1 = new Track();
+        t1.setName("Better");
+        t1.setComments("soft acoustic");
+
         when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
-        Optional<Track> deleteTrack = trackService.deleteTrackById(track.getId());
-        Assert.assertEquals(true, trackRepository.existsById(track.getId()));
+
+        Track trackUpdated =  trackService.updateTrack(24,t1);
+
+        verify(trackRepository,times(2)).findById(track.getId());
+
+    }
+
+    @Test
+    public void givenInputShouldReturnTrackByNameSuccess() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+
+        when(trackRepository.findByName(track.getName())).thenReturn(track);
+
+        Track searchedName = trackService.getByName("soul");
+
+        assertSame(searchedName,track);
+
+        verify(trackRepository,times(2)).findByName(track.getName());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void givenInputShouldReturnTrackByNameException() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+
+        when(trackRepository.findByName(track.getName())).thenReturn(track);
+
+        Track searchedName = trackService.getByName("jagsdugasduasi");
+        searchedName.getId();
+        verify(trackRepository,times(2)).findById(track.getId());
+    }
+}
+    @Test(expected = TrackNotFoundException.class)
+    public void givenInputShouldUpdateTrackException() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+        Track t1 = new Track();
+        t1.setName("Better");
+        t1.setComments("soft acoustic");
+
+        when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
+
+        Track trackUpdated =  trackService.updateTrack(24,t1);
+
+        verify(trackRepository,times(2)).findById(track.getId());
+
+    }
+
+    @Test
+    public void givenInputShouldReturnTrackByNameSuccess() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+
+        when(trackRepository.findByName(track.getName())).thenReturn(track);
+
+        Track searchedName = trackService.getByName("soul");
+
+        assertSame(searchedName,track);
+
+        verify(trackRepository,times(2)).findByName(track.getName());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void givenInputShouldReturnTrackByNameException() throws TrackNotFoundException {
+
+        trackRepository.save(track);
+
+        when(trackRepository.findByName(track.getName())).thenReturn(track);
+
+        Track searchedName = trackService.getByName("rock on");
+        searchedName.getId();
+        verify(trackRepository,times(2)).findById(track.getId());
     }
 }
